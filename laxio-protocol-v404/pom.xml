@@ -5,16 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>laxio-parent</artifactId>
+        <artifactId>laxio-protocol</artifactId>
         <groupId>org.laxio</groupId>
         <version>1.13.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>laxio-protocol</artifactId>
-    <packaging>pom</packaging>
+    <version>1.13.2.404-SNAPSHOT</version>
 
-    <modules>
-        <module>laxio-protocol-v404</module>
-        <module>laxio-protocol-basic</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.laxio</groupId>
+            <artifactId>laxio-api</artifactId>
+            <version>1.13.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
