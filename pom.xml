@@ -10,7 +10,7 @@
         <version>1.13.2-SNAPSHOT</version>
     </parent>
 
-    <artifactId>laxio-protocol</artifactId>
+    <artifactId>laxio-protocol-parent</artifactId>
     <packaging>pom</packaging>
 
     <modules>

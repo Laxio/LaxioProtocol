@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>org.laxio</groupId>
-        <artifactId>laxio-protocol</artifactId>
+        <artifactId>laxio-protocol-parent</artifactId>
         <version>1.13.2-SNAPSHOT</version>
     </parent>
 

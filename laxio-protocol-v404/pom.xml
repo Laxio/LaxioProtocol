@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>laxio-protocol</artifactId>
         <groupId>org.laxio</groupId>
+        <artifactId>laxio-protocol-parent</artifactId>
         <version>1.13.2-SNAPSHOT</version>
     </parent>
 
-    <artifactId>laxio-protocol</artifactId>
-    <version>1.13.2.404-SNAPSHOT</version>
+    <artifactId>laxio-protocol-v404</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
