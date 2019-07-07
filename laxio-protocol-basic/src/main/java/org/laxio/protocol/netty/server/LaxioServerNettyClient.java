@@ -38,12 +38,14 @@ public class LaxioServerNettyClient extends ChannelInboundMessageAdapter<Packet>
     private Channel channel;
 
     private ProtocolState protocolState;
+    private int protocolVersion;
     private Protocol protocol;
 
     public LaxioServerNettyClient(LaxioApplication application) {
         this.application = application;
         this.compression = new NettyCompression();
         this.protocolState = ProtocolState.HANDSHAKE;
+        this.protocolVersion = -1;
         this.protocol = HandshakingProtocol.INSTANCE;
     }
 
@@ -70,6 +72,15 @@ public class LaxioServerNettyClient extends ChannelInboundMessageAdapter<Packet>
     @Override
     public void setProtocolState(ProtocolState protocolState) {
         this.protocolState = protocolState;
+    }
+
+    @Override
+    public int getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    public void setProtocolVersion(int protocolVersion) {
+        this.protocolVersion = protocolVersion;
     }
 
     @Override
@@ -106,17 +117,15 @@ public class LaxioServerNettyClient extends ChannelInboundMessageAdapter<Packet>
         System.out.println("IN! " + packet);
 
         if (packet instanceof HandshakeClientHandshakePacket) {
-            setProtocolState(ProtocolState.values()[((HandshakeClientHandshakePacket) packet).getNextState()]);
+            HandshakeClientHandshakePacket handshake = (HandshakeClientHandshakePacket) packet;
+            setProtocolState(handshake.getNextState());
+            setProtocolVersion(handshake.getProtocolVersion());
         } else if (packet instanceof StatusClientRequestPacket) {
             List<ServerListResponsePlayersRecord> playersRecordList = new ArrayList<>();
-            for (int i = 0; i < 500; i++) {
-                playersRecordList.add(new ServerListResponsePlayersRecord("Player" + i, UUID.randomUUID()));
-            }
-
             String text = ChatColor.AQUA + application.getName() + ChatColor.WHITE + " |-| " + ChatColor.GRAY + "My Cool Server!";
             sendPacket(new StatusServerResponsePacket(
                 new ServerListResponse(
-                    new ServerListResponseVersion("Test", 404),
+                    new ServerListResponseVersion("Test", getProtocolVersion()),
                     new ServerListResponsePlayers(
                             0,
                             application.getAddress().getPort(),

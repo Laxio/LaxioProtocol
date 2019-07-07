@@ -3,6 +3,7 @@ package org.laxio.protocol.netty.packet.client.handshake;
 import org.laxio.network.stream.LaxioInput;
 import org.laxio.network.stream.LaxioOutput;
 import org.laxio.packet.Packet;
+import org.laxio.protocol.ProtocolState;
 
 import java.io.IOException;
 
@@ -11,13 +12,13 @@ public class HandshakeClientHandshakePacket implements Packet {
     private int protocolVersion;
     private String serverAddress;
     private int serverPort;
-    private int nextState;
+    private ProtocolState nextState;
 
     public HandshakeClientHandshakePacket() {
         // nope
     }
 
-    public HandshakeClientHandshakePacket(int protocolVersion, String serverAddress, int serverPort, int nextState) {
+    public HandshakeClientHandshakePacket(int protocolVersion, String serverAddress, int serverPort, ProtocolState nextState) {
         this.protocolVersion = protocolVersion;
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
@@ -36,7 +37,7 @@ public class HandshakeClientHandshakePacket implements Packet {
         return serverPort;
     }
 
-    public int getNextState() {
+    public ProtocolState getNextState() {
         return nextState;
     }
 
@@ -45,7 +46,7 @@ public class HandshakeClientHandshakePacket implements Packet {
         protocolVersion = input.readVarInt();
         serverAddress = input.readString();
         serverPort = input.readUnsignedShort();
-        nextState = input.readVarInt();
+        nextState = ProtocolState.values()[input.readVarInt()];
     }
 
     @Override
@@ -53,7 +54,7 @@ public class HandshakeClientHandshakePacket implements Packet {
         output.writeVarInt(protocolVersion);
         output.writeString(serverAddress);
         output.writeUnsignedShort(serverPort);
-        output.writeVarInt(nextState);
+        output.writeVarInt(nextState.ordinal());
     }
 
     @Override
