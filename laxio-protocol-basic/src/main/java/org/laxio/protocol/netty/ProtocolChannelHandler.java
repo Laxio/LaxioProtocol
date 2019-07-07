@@ -5,7 +5,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-import org.laxio.network.connection.Connection;
+import org.laxio.LaxioApplication;
 import org.laxio.protocol.netty.pipeline.PacketDecoder;
 import org.laxio.protocol.netty.pipeline.PacketDeflator;
 import org.laxio.protocol.netty.pipeline.PacketEncoder;
@@ -16,6 +16,12 @@ import org.laxio.protocol.netty.server.LaxioServerNettyClient;
 
 public class ProtocolChannelHandler extends ChannelInitializer<SocketChannel> {
 
+    private final LaxioApplication application;
+
+    public ProtocolChannelHandler(LaxioApplication application) {
+        this.application = application;
+    }
+
     @Override
     protected void initChannel(SocketChannel channel) throws Exception {
         try {
@@ -24,7 +30,7 @@ public class ProtocolChannelHandler extends ChannelInitializer<SocketChannel> {
             // TODO: check if this can be ignored
         }
 
-        LaxioServerNettyClient connection = new LaxioServerNettyClient();
+        LaxioServerNettyClient connection = new LaxioServerNettyClient(application);
 
         //
         // ========================

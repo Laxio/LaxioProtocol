@@ -24,8 +24,7 @@ public class StatusServerResponsePacket implements Packet {
 
     @Override
     public void read(LaxioInput input) throws IOException {
-        String value = input.readString();
-        response = MAPPER.readValue(value, ServerListResponse.class);
+        response = MAPPER.readValue(input.readString(), ServerListResponse.class);
     }
 
     @Override

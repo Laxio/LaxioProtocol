@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.ThreadFactory;
-import java.util.logging.Level;
 
 public class LaxioServerNettyServer extends LaxioThread implements NetworkServer {
 
@@ -54,7 +53,7 @@ public class LaxioServerNettyServer extends LaxioThread implements NetworkServer
                 ServerBootstrap bootstrap = new ServerBootstrap();
                 bootstrap.group(boss, worker)
                          .channel(NioServerSocketChannel.class)
-                         .childHandler(new ProtocolChannelHandler());
+                         .childHandler(new ProtocolChannelHandler(getApplication()));
 
                 bootstrap.bind(bindAddress).sync();
                 System.out.println("Bound!");

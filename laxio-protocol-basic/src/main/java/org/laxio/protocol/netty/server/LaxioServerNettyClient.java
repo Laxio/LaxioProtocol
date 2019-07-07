@@ -2,6 +2,8 @@ package org.laxio.protocol.netty.server;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import org.laxio.LaxioApplication;
+import org.laxio.chat.ChatColor;
 import org.laxio.network.connection.Compression;
 import org.laxio.network.connection.Connection;
 import org.laxio.packet.Packet;
@@ -28,6 +30,7 @@ import java.util.UUID;
 
 public class LaxioServerNettyClient extends ChannelInboundMessageAdapter<Packet> implements Connection {
 
+    private final LaxioApplication application;
     private final Compression compression;
 
     private InetSocketAddress address;
@@ -37,10 +40,16 @@ public class LaxioServerNettyClient extends ChannelInboundMessageAdapter<Packet>
     private ProtocolState protocolState;
     private Protocol protocol;
 
-    public LaxioServerNettyClient() {
+    public LaxioServerNettyClient(LaxioApplication application) {
+        this.application = application;
         this.compression = new NettyCompression();
         this.protocolState = ProtocolState.HANDSHAKE;
         this.protocol = HandshakingProtocol.INSTANCE;
+    }
+
+    @Override
+    public LaxioApplication getApplication() {
+        return application;
     }
 
     @Override
@@ -93,18 +102,30 @@ public class LaxioServerNettyClient extends ChannelInboundMessageAdapter<Packet>
 
     @Override
     public void onMessage(ChannelHandlerContext ctx, Packet packet) throws Exception {
+        // TODO: change this completely
         System.out.println("IN! " + packet);
 
         if (packet instanceof HandshakeClientHandshakePacket) {
             setProtocolState(ProtocolState.values()[((HandshakeClientHandshakePacket) packet).getNextState()]);
         } else if (packet instanceof StatusClientRequestPacket) {
             List<ServerListResponsePlayersRecord> playersRecordList = new ArrayList<>();
-            playersRecordList.add(new ServerListResponsePlayersRecord("Harry1", UUID.randomUUID()));
-            playersRecordList.add(new ServerListResponsePlayersRecord("Harry2", UUID.randomUUID()));
-            playersRecordList.add(new ServerListResponsePlayersRecord("Harry3", UUID.randomUUID()));
-            playersRecordList.add(new ServerListResponsePlayersRecord("Harry4", UUID.randomUUID()));
+            for (int i = 0; i < 500; i++) {
+                playersRecordList.add(new ServerListResponsePlayersRecord("Player" + i, UUID.randomUUID()));
+            }
 
-            sendPacket(new StatusServerResponsePacket(new ServerListResponse(new ServerListResponseVersion("Test", 404), new ServerListResponsePlayers(0, 0, playersRecordList), new ServerListResponseDescription("test"), null)));
+            String text = ChatColor.AQUA + application.getName() + ChatColor.WHITE + " |-| " + ChatColor.GRAY + "My Cool Server!";
+            sendPacket(new StatusServerResponsePacket(
+                new ServerListResponse(
+                    new ServerListResponseVersion("Test", 404),
+                    new ServerListResponsePlayers(
+                            0,
+                            application.getAddress().getPort(),
+                            playersRecordList
+                    ),
+                    new ServerListResponseDescription(text),
+                    null
+                )
+            ));
         } else if (packet instanceof StatusClientPingPacket) {
             sendPacket(new StatusServerPongPacket(((StatusClientPingPacket) packet).getPayload()));
         }
