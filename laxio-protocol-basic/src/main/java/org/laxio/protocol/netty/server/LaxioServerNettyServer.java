@@ -4,7 +4,7 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.laxio.LaxioApplication;
+import org.laxio.Application;
 import org.laxio.network.NetworkServer;
 import org.laxio.protocol.netty.ProtocolChannelHandler;
 import org.laxio.thread.LaxioThread;
@@ -24,7 +24,7 @@ public class LaxioServerNettyServer extends LaxioThread implements NetworkServer
     private EventLoopGroup boss;
     private EventLoopGroup worker;
 
-    public LaxioServerNettyServer(LaxioApplication application, InetSocketAddress bindAddress) {
+    public LaxioServerNettyServer(Application application, InetSocketAddress bindAddress) {
         super(application);
         this.bindAddress = bindAddress;
     }
@@ -56,7 +56,7 @@ public class LaxioServerNettyServer extends LaxioThread implements NetworkServer
                          .childHandler(new ProtocolChannelHandler(getApplication()));
 
                 bootstrap.bind(bindAddress).sync();
-                System.out.println("Bound!");
+                LOGGER.info("Bound to {}:{}", bindAddress.getHostString(), bindAddress.getPort());
             } catch (Exception ex) {
                 LOGGER.error("Unable to bind server", ex);
             }

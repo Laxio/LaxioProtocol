@@ -5,7 +5,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-import org.laxio.LaxioApplication;
+import org.laxio.Application;
 import org.laxio.protocol.netty.pipeline.PacketDecoder;
 import org.laxio.protocol.netty.pipeline.PacketDeflator;
 import org.laxio.protocol.netty.pipeline.PacketEncoder;
@@ -16,9 +16,9 @@ import org.laxio.protocol.netty.server.LaxioServerNettyClient;
 
 public class ProtocolChannelHandler extends ChannelInitializer<SocketChannel> {
 
-    private final LaxioApplication application;
+    private final Application application;
 
-    public ProtocolChannelHandler(LaxioApplication application) {
+    public ProtocolChannelHandler(Application application) {
         this.application = application;
     }
 

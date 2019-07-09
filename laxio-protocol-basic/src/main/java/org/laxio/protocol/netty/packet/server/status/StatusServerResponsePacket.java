@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.laxio.network.stream.LaxioInput;
 import org.laxio.network.stream.LaxioOutput;
 import org.laxio.packet.Packet;
+import org.laxio.protocol.netty.packet.AbstractPacket;
 import org.laxio.protocol.status.ServerListResponse;
 
 import java.io.IOException;
 
-public class StatusServerResponsePacket implements Packet {
+public class StatusServerResponsePacket extends AbstractPacket {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 

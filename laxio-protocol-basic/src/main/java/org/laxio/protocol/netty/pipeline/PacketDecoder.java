@@ -3,13 +3,19 @@ package org.laxio.protocol.netty.pipeline;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import org.laxio.chat.ChatColor;
+import org.laxio.chat.MessageBuilder;
 import org.laxio.network.connection.Connection;
 import org.laxio.packet.Packet;
 import org.laxio.protocol.netty.stream.LaxioByteBuf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class PacketDecoder extends ByteToMessageDecoder {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PacketDecoder.class);
 
     private final Connection connection;
 
@@ -27,12 +33,8 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
-        /*DecoderExceptionMessage message = new DecoderExceptionMessage(client, client.getServer(), cause);
-        client.getServer().getManager().call(message);
-
-        //client.sendPacket(new PlayDisconnectPacket(message.getDisconnectReason()));
-        //ctx.close();*/
+        LOGGER.error("Unable to decode Packet", cause);
+        connection.disconnect(cause);
     }
 
 }

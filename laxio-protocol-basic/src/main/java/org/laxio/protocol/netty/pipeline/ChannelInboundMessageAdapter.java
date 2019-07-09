@@ -13,7 +13,7 @@ public abstract class ChannelInboundMessageAdapter<T> extends ChannelInboundHand
         try {
             T cast = (T) msg;
             onMessage(ctx, cast);
-        } catch (ClassCastException ex) {
+        } catch (Exception ex) {
             exceptionCaught(ctx, ex);
         }
     }

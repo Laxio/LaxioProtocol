@@ -8,6 +8,8 @@ import org.laxio.packet.Packet;
 import org.laxio.protocol.PacketOrigin;
 import org.laxio.protocol.Protocol;
 import org.laxio.protocol.ProtocolState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -16,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StatefulProtocol implements Protocol {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatefulProtocol.class);
 
     private final int version;
 
@@ -49,7 +53,7 @@ public class StatefulProtocol implements Protocol {
     }
 
     @Override
-    public int getVersion() {
+    public int getProtocolVersion() {
         return version;
     }
 
@@ -63,13 +67,20 @@ public class StatefulProtocol implements Protocol {
 
     @Override
     public void writePacket(Connection connection, LaxioOutput output, Packet packet) throws IOException {
-        int packetId = reversePackets.get(packet.getClass());
+        Integer packetId = reversePackets.get(packet.getClass());
+        if (packetId == null) {
+            throw new InternalProtocolException("Unregistered Packet: " + packet.getClass().getSimpleName());
+        }
+
         output.writeVarInt(packetId);
         packet.write(output);
     }
 
     private Packet build(ProtocolState state, int packetId) {
         Class<? extends Packet> packetType = packets.get(PacketOrigin.CLIENT).get(state).get(packetId);
+        if (packetType == null) {
+            throw new InternalProtocolException("Unknown Packet: " + PacketOrigin.CLIENT + " - 0x" + Integer.toHexString(packetId).toUpperCase());
+        }
 
         try {
             return packetType.getConstructor().newInstance();

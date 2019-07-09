@@ -3,10 +3,11 @@ package org.laxio.protocol.netty.packet.server.status;
 import org.laxio.network.stream.LaxioInput;
 import org.laxio.network.stream.LaxioOutput;
 import org.laxio.packet.Packet;
+import org.laxio.protocol.netty.packet.AbstractPacket;
 
 import java.io.IOException;
 
-public class StatusServerPongPacket implements Packet {
+public class StatusServerPongPacket extends AbstractPacket {
 
     private long payload;
 

@@ -20,5 +20,10 @@
             <version>1.13.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.laxio</groupId>
+            <artifactId>laxio-protocol-basic</artifactId>
+            <version>1.13.2-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

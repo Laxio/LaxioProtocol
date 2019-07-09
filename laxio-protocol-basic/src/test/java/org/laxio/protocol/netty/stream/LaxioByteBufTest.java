@@ -241,11 +241,6 @@ class LaxioByteBufTest {
         assertEquals(write, value);
 
         assertThrows(IndexOutOfBoundsException.class, lbf::read, NO_MORE_CONTENT);
-
-        ByteBuf buf1 = Unpooled.copiedBuffer(new byte[]{16, 0, 0});
-        LaxioByteBuf lbf1 = new LaxioByteBuf(buf1);
-        int readValue = lbf.readVarInt();
-        System.out.println("Read Value: " + readValue);
     }
 
     @Test

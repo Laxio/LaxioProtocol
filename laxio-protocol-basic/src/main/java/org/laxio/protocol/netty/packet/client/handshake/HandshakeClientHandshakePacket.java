@@ -4,10 +4,11 @@ import org.laxio.network.stream.LaxioInput;
 import org.laxio.network.stream.LaxioOutput;
 import org.laxio.packet.Packet;
 import org.laxio.protocol.ProtocolState;
+import org.laxio.protocol.netty.packet.AbstractPacket;
 
 import java.io.IOException;
 
-public class HandshakeClientHandshakePacket implements Packet {
+public class HandshakeClientHandshakePacket extends AbstractPacket {
 
     private int protocolVersion;
     private String serverAddress;
